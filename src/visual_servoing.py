@@ -5,8 +5,6 @@ import math
 import tf.transformations
 import modern_robotics
 
-from util import *
-
 class VisualServoing(object):
     def __init__(self):
         self._translation_only = False
@@ -33,7 +31,7 @@ class PBVS(VisualServoing):
 
         print "PBVS Set Target, t:{0}, R:{1}".format(self._target_feature_t, self._target_feature_R)
 
-    def __calculate_error(self, t_input, R_input):
+    def _calculate_error(self, t_input, R_input):
         '''
         Caculate error based on the input pose and the target pose
 
@@ -50,7 +48,7 @@ class PBVS(VisualServoing):
         t_del = t_curr - self._target_feature_t
         R_del = np.dot(self._target_feature_R, R_curr.T)
         R_del_homo = np.vstack((np.hstack((R_del, np.zeros((3,1)))), np.array([0, 0, 0, 1])))
-        (theta, u, p)= tf.transformations.rotation_from_matrix(R_del_homo)
+        (theta, u, _)= tf.transformations.rotation_from_matrix(R_del_homo)
 
         if self._translation_only:
             error = np.hstack((t_del, np.zeros((1,3))))
@@ -59,7 +57,7 @@ class PBVS(VisualServoing):
         
         return error
 
-    def __L(self, t_input, R_input):
+    def _L(self, t_input, R_input):
         '''
         form interaction matrix / feature jacobian base on current camera pose
 
@@ -73,7 +71,7 @@ class PBVS(VisualServoing):
         
         R_del = np.dot(self._target_feature_R, R_curr.T)
         R_del_homo = np.vstack((np.hstack((R_del, np.zeros((3,1)))), np.array([0, 0, 0, 1])))
-        (theta, u, p)= tf.transformations.rotation_from_matrix(R_del_homo)
+        (theta, u, _)= tf.transformations.rotation_from_matrix(R_del_homo)
 
         skew_symmetric = modern_robotics.VecToso3
 
@@ -103,7 +101,7 @@ class PBVS(VisualServoing):
         
         return vel
 
-    def __calculate_error2(self, t_input, R_input):
+    def _calculate_error2(self, t_input, R_input):
         '''
         Caculate error based on the input pose and the target pose
 
@@ -120,7 +118,7 @@ class PBVS(VisualServoing):
         # t_del = t_curr - self._target_feature_t
         R_del = np.dot(self._target_feature_R, R_curr.T)
         R_del_homo = np.vstack((np.hstack((R_del, np.zeros((3,1)))), np.array([0, 0, 0, 1])))
-        (theta, u, p)= tf.transformations.rotation_from_matrix(R_del_homo)
+        (theta, u, _)= tf.transformations.rotation_from_matrix(R_del_homo)
 
 
         # see paragraph above Eq.17
@@ -134,7 +132,7 @@ class PBVS(VisualServoing):
         
         return error
 
-    def __L2(self, t_input, R_input):
+    def _L2(self, t_input, R_input):
         '''
         form interaction matrix / feature jacobian base on current camera pose
 
@@ -148,7 +146,9 @@ class PBVS(VisualServoing):
         
         R_del = np.dot(self._target_feature_R, R_curr.T)
         R_del_homo = np.vstack((np.hstack((R_del, np.zeros((3,1)))), np.array([0, 0, 0, 1])))
-        (theta, u, p)= tf.transformations.rotation_from_matrix(R_del_homo)
+        (theta, u, _)= tf.transformations.rotation_from_matrix(R_del_homo)
+
+        skew_symmetric = modern_robotics.VecToso3
 
         # skew_t = skew_symmetric(t_curr)
         L_theta_u = np.identity(3) - (theta/2)*skew_symmetric(u) + (1-(np.sinc(theta)/(np.sinc(theta/2)**2)))*np.dot(skew_symmetric(u),skew_symmetric(u))
@@ -169,6 +169,6 @@ class PBVS(VisualServoing):
                 R_input, 1x4 vector, quaternion
         '''
 
-        L = self._L2(t_input, R_input)
+        #L = self._L2(t_input, R_input)
 
-        error = 0
+        #error = 0

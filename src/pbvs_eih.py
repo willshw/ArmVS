@@ -5,7 +5,7 @@ import rospy
 import roslib
 import numpy as np
 
-from tf.transformations import *
+# from tf.transformations import *
 import tf
 
 from baxter import BaxterVS
@@ -32,7 +32,7 @@ if __name__ == '__main__':
         tf_listener = tf.TransformListener()
 
         limb = 'left'
-        baxter = BaxterVS(limb, tf_listener)
+        baxter_vs = BaxterVS(limb, tf_listener)
         controller = PBVS()
 
         # set target pose
@@ -57,8 +57,8 @@ if __name__ == '__main__':
             # perform visual servoing
             vel_cam = controller.caculate_vel(t_curr, R_curr)
 
-            vel_body = BaxterVS.body_frame_twist(vel_cam)
-            BaxterVS.set_joint_vel(vel_body)
+            vel_body = baxter_vs.body_frame_twist(vel_cam)
+            baxter_vs.set_joint_vel(vel_body)
 
             r.sleep()
 

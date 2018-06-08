@@ -60,11 +60,10 @@ class BaxterVS(object):
         '''
 
         try:
-            (R, t) = self.tf_listener.lookupTransform('/base','/' + self._limb + '_hand',rospy.Time(0))
+            (R, t) = self._tf_listener.lookupTransform('/base','/' + self._limb + '_hand',rospy.Time(0))
         
         except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
             print 'Warning! Cannot find [{}_hand] tf to [base].'.format(self._limb)
-            continue
 
         R = quaternion_matrix(R)
 
@@ -91,7 +90,7 @@ class BaxterVS(object):
         '''
 
          # Calculate joint velocities to achieve desired velocity
-        joint_vels=np.dot(self._kin.jacobian_pseudo_inverse(),vel)
+        joint_vels=np.dot(self._kin.jacobian_pseudo_inverse(), vel_b)
         joints=dict(zip(self._arm.joint_names(),(joint_vels)))
 
         self._arm.set_joint_velocities(joints)
