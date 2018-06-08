@@ -10,7 +10,7 @@
 3. [Chaumette, François, and Seth Hutchinson. "Visual servo control. II. Advanced approaches [Tutorial]." IEEE Robotics & Automation Magazine 14.1 (2007): 109-118.](https://hal.inria.fr/inria-00350638/document)
 4. [Bateux, Quentin, et al. "Training Deep Neural Networks for Visual Servoing." ICRA 2018-IEEE International Conference on Robotics and Automation. 2018.](https://hal.inria.fr/hal-01716679/document)
 
-### GitHub
+### GitHub Repo
 
 1. [ViSP](https://github.com/lagadic/visp)
 2. [ROS Package: Visual Seroving for Baxter](https://github.com/alexzzhu/visual_servoing)
@@ -28,7 +28,7 @@
 3. [ten Pas, Andreas, et al. "Grasp pose detection in point clouds." The International Journal of Robotics Research (2017): 0278364917735594.](https://arxiv.org/pdf/1706.09911.pdf)
 4. [Gualtieri, Marcus, Andreas ten Pas, and Robert Platt. "Pick and Place Without Geometric Object Models."](https://arxiv.org/pdf/1707.05615.pdf)
 
-### GitHub
+### GitHub Repo
 
 1. [Andreas ten Pas, PhD @ Northeastern University](https://github.com/atenpas)
 
