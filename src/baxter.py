@@ -12,6 +12,7 @@ import rospy
 import sys
 from tf.transformations import quaternion_matrix
 import tf
+import copy
 
 import modern_robotics
 
@@ -35,10 +36,10 @@ class BaxterVS(object):
 
         # h: hand, c: camera
         try:
-            (self._R_hc, self._t_hc) = tf_listener.lookupTransform('/' + self._limb + '_hand','/' + self._limb + '_hand_camera',rospy.Time(0))
-        
+            self._tf_listener.waitForTransform('/' + self._limb + '_hand', '/' + self._limb + '_hand_camera', rospy.Time(), rospy.Duration(4.0))
+            (self._t_hc, self._R_hc) = self._tf_listener.lookupTransform('/' + self._limb + '_hand', '/' + self._limb + '_hand_camera', rospy.Time(0))
         except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
-            print 'Error! Cannot find [goal] to [{}_hand_camera] tf.'.format(self._limb)
+            print 'Error! Cannot find [{}_hand_camera] to [{}_hand] tf.'.format(self._limb, self._limb)
             sys.exit(0)
 
         self._R_hc = quaternion_matrix(self._R_hc)
@@ -51,7 +52,7 @@ class BaxterVS(object):
         self._T_bh = np.zeros((4,4))
         self._Ad_bh = np.zeros((6,6))
 
-        self._arm = baxter_interface.limb.Limb(self._limb)
+        self._arm = baxter_interface.limb.Limb(self._limb)  
         self._kin = baxter_kinematics(self._limb)
 
     def update_hand_to_body_transforms(self):
@@ -60,7 +61,8 @@ class BaxterVS(object):
         '''
 
         try:
-            (R, t) = self._tf_listener.lookupTransform('/base','/' + self._limb + '_hand',rospy.Time(0))
+            self._tf_listener.waitForTransform('/base', '/' + self._limb + '_hand', rospy.Time(), rospy.Duration(4.0))
+            (t, R) = self._tf_listener.lookupTransform('/base', '/' + self._limb + '_hand', rospy.Time(0))
         
         except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
             print 'Warning! Cannot find [{}_hand] tf to [base].'.format(self._limb)
@@ -90,7 +92,9 @@ class BaxterVS(object):
         '''
 
          # Calculate joint velocities to achieve desired velocity
-        joint_vels=np.dot(self._kin.jacobian_pseudo_inverse(), vel_b)
-        joints=dict(zip(self._arm.joint_names(),(joint_vels)))
+        joint_vels = np.dot(self._kin.jacobian_pseudo_inverse(), vel_b)
+        joint_vels = np.array(joint_vels).reshape(-1,)
+    
+        joints=dict(zip(self._arm.joint_names(), joint_vels))
 
         self._arm.set_joint_velocities(joints)

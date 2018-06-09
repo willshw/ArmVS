@@ -2,7 +2,6 @@
 
 import sys
 import rospy
-import roslib
 import numpy as np
 
 # from tf.transformations import *
@@ -37,9 +36,10 @@ if __name__ == '__main__':
 
         # set target pose
         try:
-            (R_target,t_target) = tf_listener.lookupTransform('/' + limb + '_hand_camera', '/goal', rospy.Time(0))
+            tf_listener.waitForTransform('/desired_camera_frame', '/tag_0', rospy.Time(), rospy.Duration(4.0))
+            (t_target, R_target) = tf_listener.lookupTransform('/desired_camera_frame', '/tag_0', rospy.Time(0))
         except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
-            print 'Error! Cannot find [goal] to [{}_hand_camera] tf.'.format(limb)
+            print 'Error! Cannot find [tag_0] to [desired_camera_frame] tf.'
             sys.exit(0)
 
         controller.set_target_feature(t_target, R_target)
@@ -49,7 +49,8 @@ if __name__ == '__main__':
 
             # get pose estimation from apriltag node
             try:
-                (R_curr,t_curr) = tf_listener.lookupTransform('/' + limb + '_hand_camera', '/tag_0', rospy.Time(0))
+                # tf_listener.waitForTransform('/' + limb + '_hand_camera', '/tag_0', rospy.Time(), rospy.Duration(4.0))
+                (t_curr, R_curr) = tf_listener.lookupTransform('/' + limb + '_hand_camera', '/tag_0', rospy.Time(0))
             except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
                 print 'Warning! Cannot find [tag_0] to [{}_hand_camera] tf.'.format(limb)
                 continue

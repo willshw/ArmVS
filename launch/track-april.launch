@@ -1,15 +1,41 @@
 <launch>
-    <!-- <node name="camera_goal_static_tf" pkg="tf" type="static_transform_publisher" args="0.4 -0.28 0.5 1.0 0.0 0.0 0.0 tag_0 camera_goal 10" /> -->
-    <node name="goal_to_left_hand" pkg="tf" type="static_transform_publisher" args="0 0 0.5 1.0 0.0 0.0 0.0 left_hand goal 100" />
+    <arg name="robot" default="true"/>
 
-    <include file="$(find apriltags2_ros)/launch/continuous_detection.launch">
-        <arg name="launch_prefix" default="" /> <!-- set to value="gdbserver localhost:10000" for remote debugging -->
-        <arg name="node_namespace" default="apriltags2_ros_continuous_node" />
-        <arg name="camera_name" default="/cameras/left_hand_camera" />
-        <arg name="camera_frame" default="left_hand_camera" />
-        <arg name="image_topic" default="image" />
-    </include>
+    <node name="camera_goal_static_tf" pkg="tf" type="static_transform_publisher" args="0 0 0.5 1.0 0.0 0.0 0.0 tag_0 desired_camera_frame 100" />
+    <!-- <node name="goal_to_left_hand" pkg="tf" type="static_transform_publisher" args="0 0 0.5 1.0 0.0 0.0 0.0 left_hand goal 100" /> -->
 
-    <!-- <node name="track_tag" pkg="visual-servoing" type="track_tag.py" /> -->
+    <group if="$(arg robot)">
+        <!-- stuff that will only be evaluated if foo is true -->
+        <include file="$(find apriltags2_ros)/launch/continuous_detection.launch">
+            <arg name="launch_prefix" default="" /> <!-- set to value="gdbserver localhost:10000" for remote debugging -->
+            <arg name="node_namespace" default="apriltags2_ros_continuous_node" />
+
+            <arg name="camera_name" default="/cameras/left_hand_camera" />
+            <arg name="camera_frame" default="left_hand_camera" />
+            <arg name="image_topic" default="image" />
+        </include>
+    </group>
+
+    <group unless="$(arg robot)">
+        <include file="$(find apriltags2_ros)/launch/continuous_detection.launch">
+            <arg name="launch_prefix" default="" /> <!-- set to value="gdbserver localhost:10000" for remote debugging -->
+            <arg name="node_namespace" default="apriltags2_ros_continuous_node" />
+            <arg name="camera_name" default="/usb_cam" />
+            <arg name="camera_frame" default="usb_cam" />
+            <arg name="image_topic" default="image_rect" />
+        </include>
+
+        <node name="usb_cam" pkg="usb_cam" type="usb_cam_node" output="screen" >
+            <param name="video_device" value="/dev/v4l/by-id/usb-046d_0825_3DC07550-video-index0" />
+            <param name="image_width" value="640" />
+            <param name="image_height" value="480" />
+            <param name="pixel_format" value="mjpeg" />
+            <param name="camera_frame_id" value="usb_cam" />
+        </node>
+
+        <node name="image_proc" pkg="image_proc" type="image_proc" ns="usb_cam"/>
+
+        <!-- <node name="rviz" pkg="rviz" type="rviz" args="-f /usb_cam -d $(find camera_stuff)/rviz_config/usb_cam_frame.rviz"/> -->
+    </group>
 
 </launch>

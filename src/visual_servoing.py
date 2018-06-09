@@ -29,7 +29,10 @@ class PBVS(VisualServoing):
         self._target_feature_R = tf.transformations.quaternion_matrix(R_input)[0:3, 0:3]
         self._target_features_set = True
 
-        print "PBVS Set Target, t:{0}, R:{1}".format(self._target_feature_t, self._target_feature_R)
+        print "\n"
+        print "PBVS Set Target:"
+        print "t:{0}".format(self._target_feature_t)
+        print "R:{1}".format(self._target_feature_R)
 
     def _calculate_error(self, t_input, R_input):
         '''
@@ -44,7 +47,7 @@ class PBVS(VisualServoing):
         R_curr = tf.transformations.quaternion_matrix(R_input)[0:3, 0:3]
 
         # see paragraph above Eq.13
-        # of Chaumette, François, and Seth Hutchinson. "Visual servo control. I. Basic approaches."
+        # of Chaumette, Francois, and Seth Hutchinson. "Visual servo control. I. Basic approaches."
         t_del = t_curr - self._target_feature_t
         R_del = np.dot(self._target_feature_R, R_curr.T)
         R_del_homo = np.vstack((np.hstack((R_del, np.zeros((3,1)))), np.array([0, 0, 0, 1])))
@@ -72,11 +75,11 @@ class PBVS(VisualServoing):
         R_del = np.dot(self._target_feature_R, R_curr.T)
         R_del_homo = np.vstack((np.hstack((R_del, np.zeros((3,1)))), np.array([0, 0, 0, 1])))
         (theta, u, _)= tf.transformations.rotation_from_matrix(R_del_homo)
-
+        
         skew_symmetric = modern_robotics.VecToso3
 
         skew_t = skew_symmetric(t_curr)
-        L_theta_u = np.identity(3) - (theta/2)*skew_symmetric(u) + (1-(np.sinc(theta)/(np.sinc(theta/2)**2)))*np.dot(skew_symmetric(u),skew_symmetric(u))
+        L_theta_u = np.identity(3) - (theta/2)*np.array(skew_symmetric(u)) + (1-(np.sinc(theta)/((np.sinc(theta/2))**2)))*np.dot(np.array(skew_symmetric(u)), np.array(skew_symmetric(u)))
 
         L_top = np.hstack((-np.identity(3), skew_t))
         L_bottom = np.hstack((np.zeros((3,3)), L_theta_u))
@@ -114,7 +117,7 @@ class PBVS(VisualServoing):
         R_curr = tf.transformations.quaternion_matrix(R_input)[0:3, 0:3]
 
         # see paragraph above Eq.13
-        # of Chaumette, François, and Seth Hutchinson. "Visual servo control. I. Basic approaches."
+        # of Chaumette, Francois, and Seth Hutchinson. "Visual servo control. I. Basic approaches."
         # t_del = t_curr - self._target_feature_t
         R_del = np.dot(self._target_feature_R, R_curr.T)
         R_del_homo = np.vstack((np.hstack((R_del, np.zeros((3,1)))), np.array([0, 0, 0, 1])))
@@ -122,7 +125,7 @@ class PBVS(VisualServoing):
 
 
         # see paragraph above Eq.17
-        # of Chaumette, François, and Seth Hutchinson. "Visual servo control. I. Basic approaches."
+        # of Chaumette, Francois, and Seth Hutchinson. "Visual servo control. I. Basic approaches."
         t_del = self._target_feature_R*(-1 * np.dot(R_curr.T, t_curr)) + self._target_feature_t
 
         if self._translation_only:
