@@ -31,8 +31,8 @@ class PBVS(VisualServoing):
 
         print "\n"
         print "PBVS Set Target:"
-        print "t:{0}".format(self._target_feature_t)
-        print "R:{1}".format(self._target_feature_R)
+        print "t:{}".format(self._target_feature_t)
+        print "R:{}".format(self._target_feature_R)
 
     def _calculate_error(self, t_input, R_input):
         '''
@@ -54,10 +54,12 @@ class PBVS(VisualServoing):
         (theta, u, _)= tf.transformations.rotation_from_matrix(R_del_homo)
 
         if self._translation_only:
-            error = np.hstack((t_del, np.zeros((1,3))))
+            error = np.hstack((t_del, np.zeros(3)))
         else:
             error = np.hstack((t_del, theta*u))
         
+        print "Error:{:10.4f}, {:10.4f}, {:10.4f}, {:10.4f}, {:10.4f}, {:10.4f}".format(error[0], error[1], error[2], error[3], error[4], error[5])
+
         return error
 
     def _L(self, t_input, R_input):
@@ -74,6 +76,7 @@ class PBVS(VisualServoing):
         
         R_del = np.dot(self._target_feature_R, R_curr.T)
         R_del_homo = np.vstack((np.hstack((R_del, np.zeros((3,1)))), np.array([0, 0, 0, 1])))
+
         (theta, u, _)= tf.transformations.rotation_from_matrix(R_del_homo)
         
         skew_symmetric = modern_robotics.VecToso3
@@ -95,13 +98,33 @@ class PBVS(VisualServoing):
         Input:  (object in current camera frame)
                 t_input, 1x3 vector
                 R_input, 1x4 vector, quaternion
+
+        Output: Twist in camera frame
+                [nu_c, omg_c], 1x6
         '''
 
         L = self._L(t_input, R_input)
         error = self._calculate_error(t_input, R_input)
 
         vel = -self._lambda * np.dot(np.linalg.pinv(L), error)
+
+        # t_curr = np.array(t_input).flatten()
+        # R_curr = tf.transformations.quaternion_matrix(R_input)[0:3, 0:3]
         
+        # R_del = np.dot(self._target_feature_R, R_curr.T)
+        # R_del_homo = np.vstack((np.hstack((R_del, np.zeros((3,1)))), np.array([0, 0, 0, 1])))
+
+        # (theta, u, _)= tf.transformations.rotation_from_matrix(R_del_homo)
+
+        # skew_symmetric = modern_robotics.VecToso3
+
+        # vel_trans = -self._lambda * ((self._target_feature_t - t_curr) + np.dot(skew_symmetric(t_curr), theta*u))
+        # vel_rot = -self._lambda * theta * u
+
+        # vel = np.concatenate((vel_rot, vel_trans))
+
+        print "Camera Twist:{:10.4f}, {:10.4f}, {:10.4f}, {:10.4f}, {:10.4f}, {:10.4f}".format(vel[0], vel[1], vel[2], vel[3], vel[4], vel[5])
+
         return vel
 
     def _calculate_error2(self, t_input, R_input):

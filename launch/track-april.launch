@@ -1,7 +1,7 @@
 <launch>
     <arg name="robot" default="true"/>
 
-    <node name="camera_goal_static_tf" pkg="tf" type="static_transform_publisher" args="0 0 0.5 1.0 0.0 0.0 0.0 tag_0 desired_camera_frame 100" />
+    <node name="camera_goal_static_tf" pkg="tf" type="static_transform_publisher" args="0.6 -0.4 0.7 1.0 0.0 0.0 0.0 tag_0 desired_camera_frame 100" />
     <!-- <node name="goal_to_left_hand" pkg="tf" type="static_transform_publisher" args="0 0 0.5 1.0 0.0 0.0 0.0 left_hand goal 100" /> -->
 
     <group if="$(arg robot)">

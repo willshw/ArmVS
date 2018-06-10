@@ -97,4 +97,6 @@ class BaxterVS(object):
     
         joints=dict(zip(self._arm.joint_names(), joint_vels))
 
+        print "Joint Vel Command:{}".format(joint_vels)
+
         self._arm.set_joint_velocities(joints)
