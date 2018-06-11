@@ -27,7 +27,7 @@ if __name__ == '__main__':
     try:
         rospy.init_node('pbvs_eih')
         
-        r = rospy.Rate(60)
+        r = rospy.Rate(15)
         tf_listener = tf.TransformListener()
 
         limb = 'left'
@@ -47,7 +47,6 @@ if __name__ == '__main__':
 
         # set up baxter
         while not rospy.is_shutdown():
-            print "\n\nNew Loop"
 
             # get pose estimation from apriltag node
             try:
@@ -60,11 +59,7 @@ if __name__ == '__main__':
             # perform visual servoing
             vel_cam = controller.caculate_vel(t_curr, R_curr)
 
-            vel_cam = np.concatenate((vel_cam[3:6], vel_cam[0:3]))
-
             vel_body = baxter_vs.body_frame_twist(vel_cam)
-
-            vel_body = np.concatenate((vel_body[3:6], vel_body[0:3]))
 
             baxter_vs.set_joint_vel(vel_body)
 

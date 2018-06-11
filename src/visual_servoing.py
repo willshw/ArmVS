@@ -41,6 +41,8 @@ class PBVS(VisualServoing):
         Input:  (object in current camera frame)
                 t_input, 1x3 vector
                 R_input, 1x4 vector, quaternion
+
+        Output: Error, [t_err, R_err], 6x1
         '''
         
         t_curr = np.array(t_input).flatten()
@@ -58,7 +60,7 @@ class PBVS(VisualServoing):
         else:
             error = np.hstack((t_del, theta*u))
         
-        print "Error:{:10.4f}, {:10.4f}, {:10.4f}, {:10.4f}, {:10.4f}, {:10.4f}".format(error[0], error[1], error[2], error[3], error[4], error[5])
+        # print "Error:{:10.4f}, {:10.4f}, {:10.4f}, {:10.4f}, {:10.4f}, {:10.4f}".format(error[0], error[1], error[2], error[3], error[4], error[5])
 
         return error
 
@@ -69,6 +71,8 @@ class PBVS(VisualServoing):
         Input:  (object in current camera frame)
                 t_input, 1x3 vector
                 R_input, 1x4 vector, quaternion
+
+        Output: Interation Matrix (feature Jacobian), 6x6
         '''
 
         t_curr = np.array(t_input).flatten()
@@ -123,7 +127,7 @@ class PBVS(VisualServoing):
 
         # vel = np.concatenate((vel_rot, vel_trans))
 
-        print "Camera Twist:{:10.4f}, {:10.4f}, {:10.4f}, {:10.4f}, {:10.4f}, {:10.4f}".format(vel[0], vel[1], vel[2], vel[3], vel[4], vel[5])
+        # print "Camera Twist:{:10.4f}, {:10.4f}, {:10.4f}, {:10.4f}, {:10.4f}, {:10.4f}".format(vel[0], vel[1], vel[2], vel[3], vel[4], vel[5])
 
         return vel
 

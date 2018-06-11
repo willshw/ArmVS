@@ -77,11 +77,19 @@ class BaxterVS(object):
         Take a 6x1 twist vector in camera frame,
         returns the Adjoint from camera frame to body frame,
         for calculating a camera frame twist in body frame
+
+        Input: twist, [nu, omg], 1x6
+
+        Output: twist, [nu, omg], 1x6
         '''
 
         self.update_hand_to_body_transforms()
+
+        v_c = np.concatenate((v_c[3:6], v_c[0:3]))
         
         v_b = np.dot(self._Ad_bh, np.dot(self._Ad_hc, v_c))
+
+        v_b = np.concatenate((v_b[3:6], v_b[0:3]))
 
         return v_b
         
@@ -89,6 +97,8 @@ class BaxterVS(object):
         '''
         Takes a 6x1 twist vector in body frame,
         sets the corresponding joint velocities using the PyKDL package.
+
+        Input: twist, [nu, omg], 1x6
         '''
 
          # Calculate joint velocities to achieve desired velocity
@@ -97,6 +107,6 @@ class BaxterVS(object):
     
         joints=dict(zip(self._arm.joint_names(), joint_vels))
 
-        print "Joint Vel Command:{}".format(joint_vels)
+        # print "Joint Vel Command:{}".format(joint_vels)
 
         self._arm.set_joint_velocities(joints)
