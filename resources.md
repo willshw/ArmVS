@@ -9,6 +9,10 @@
 2. [Chaumette, François, and Seth Hutchinson. "Visual servo control. I. Basic approaches." IEEE Robotics & Automation Magazine 13.4 (2006): 82-90.](https://hal.inria.fr/inria-00350283/document)
 3. [Chaumette, François, and Seth Hutchinson. "Visual servo control. II. Advanced approaches [Tutorial]." IEEE Robotics & Automation Magazine 14.1 (2007): 109-118.](https://hal.inria.fr/inria-00350638/document)
 4. [Bateux, Quentin, et al. "Training Deep Neural Networks for Visual Servoing." ICRA 2018-IEEE International Conference on Robotics and Automation. 2018.](https://hal.inria.fr/hal-01716679/document)
+5. [Chaumette, Francois. "Potential problems of stability and convergence in image-based and position-based visual servoing." The confluence of vision and control. Springer, London, 1998. 66-78.](https://hal.inria.fr/inria-00352553/document)
+6. [Malis, Ezio, Francois Chaumette, and Sylvie Boudet. "2 1/2 D visual servoing." IEEE Transactions on Robotics and Automation 15.2 (1999): 238-250.](https://hal.inria.fr/inria-00352542/document)
+7. [Chaumette, François, and Éric Marchand. "A redundancy-based iterative approach for avoiding joint limits: Application to visual servoing." IEEE Transactions on Robotics and Automation 17.5 (2001): 719-730.](https://hal.inria.fr/inria-00352118/document)
+8. [Mezouar, Youcef, and François Chaumette. "Path planning for robust image-based control." IEEE Transactions on Robotics and Automation 18.4 (2002): 534-549.](https://hal.inria.fr/file/index/docid/352101/filename/2002_itra_mezouar.pdf)
 
 ### GitHub Repo
 
