@@ -13,6 +13,7 @@
 6. [Malis, Ezio, Francois Chaumette, and Sylvie Boudet. "2 1/2 D visual servoing." IEEE Transactions on Robotics and Automation 15.2 (1999): 238-250.](https://hal.inria.fr/inria-00352542/document)
 7. [Chaumette, François, and Éric Marchand. "A redundancy-based iterative approach for avoiding joint limits: Application to visual servoing." IEEE Transactions on Robotics and Automation 17.5 (2001): 719-730.](https://hal.inria.fr/inria-00352118/document)
 8. [Mezouar, Youcef, and François Chaumette. "Path planning for robust image-based control." IEEE Transactions on Robotics and Automation 18.4 (2002): 534-549.](https://hal.inria.fr/file/index/docid/352101/filename/2002_itra_mezouar.pdf)
+9. [Marchand, Eric, Alessandro Rizzo, and Francois Chaumette. "Avoiding robot joint limits and kinematic singularities in visual servoing." Pattern Recognition, 1996., Proceedings of the 13th International Conference on. Vol. 1. IEEE, 1996.](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=546037)
 
 ### GitHub Repo
 
