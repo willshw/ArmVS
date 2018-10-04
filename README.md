@@ -7,9 +7,6 @@ This is a ROS package uses visual servoing to guide robotic arms to grasp object
 ## compatible Robots
 
 - Baxter - Rethink Robotics
-- Sawyer - Rethink Robotics
-- JACO - Kinova Robotics
-- MICO - Kinova Robotics
 
 ## Package Used
 
