@@ -1,8 +1,5 @@
 #!/usr/bin/env python
-"""
-Wrapper class to interface baxter python functions (possibly GRASP specific) with visual servoing needs.
-Written by Alex Zhu (alexzhu(at)seas.upenn.edu)
-"""
+
 import baxter_interface
 from baxter_pykdl import baxter_kinematics
 
